@@ -1,7 +1,9 @@
 - [1. Overview](#1-overview)
-  - [1.1. Problem Statement](#11-problem-statement)
+  - [1.1. Background](#11-background)
   - [1.2. Purpose](#12-purpose)
 - [2. Architecture](#2-architecture)
+  - [2.1. Terminology](#21-terminology)
+  - [2.2. Models](#22-models)
 - [3. Impact Analysis](#3-impact-analysis)
 - [4. Test Cases](#4-test-cases)
   - [4.1. Key](#41-key)
@@ -13,7 +15,6 @@
     - [4.3.4. Multi Pickup, Two Responders](#434-multi-pickup-two-responders)
     - [4.3.5. Multi Pickup, One Responder, Boat Capacity Exceeded](#435-multi-pickup-one-responder-boat-capacity-exceeded)
     - [4.3.6. Multi Pickup, Two Responders, One Medical](#436-multi-pickup-two-responders-one-medical)
-- [5. Appendix](#5-appendix)
   
 # 1. Overview
 
@@ -43,6 +44,22 @@ This implementation resolves a variety of different use-cases as depicted in sec
 
 # 2. Architecture
 
+## 2.1. Terminology
+For general overview of Optaplanner terminology and concepts, please see the [Optaplanner docs](https://docs.optaplanner.org/7.44.0.Final/optaplanner-docs/html_single/index.html).
+
+The following are Optaplanner concepts used specifically in the Emergency Response demo application:
+
+* **chained model:**
+  The ER-Demo responder boat is the chain's anchor and the chain is a series of incident locations.
+  Any chain that contains a *priority zone* and the *priority zone* is not the boat's first stop should be penalized.
+
+* **Standstill:**
+  [Standstill.java](https://github.com/kiegroup/optaweb-vehicle-routing/blob/master/optaweb-vehicle-routing-backend/src/main/java/org/optaweb/vehiclerouting/plugin/planner/domain/Standstill.java) is the PlanningEntity in the *optaweb-vehicle-routing* reference demo.  It raises a lot of confusion.  It represents a common property of vehicle/boat (chain anchor) and visits/customers/rescue points (chain items).  The common property is that both anchor and regular chain item can be the **previous** item.  Each visit/incident has to have a *previousSomething*.  That something can be either a visit or a vehicle/boat anchor.  Standstill covers both cases.  If Java had union types there would be no need for Standstill.
+
+* **Shadow Variables:**
+  Shadow variables are closely related to the chained model. They bridge the gap between how the domain model is used by OptaPlanner and how the programmer wants to use it. OptaPlanner uses Visit's previousStandstill field as the planning variable and assigns another Visit or a Vehicle to it. So it starts with a single element and builds the chain by adding more elements to it until it adds the anchor (which itself doesn't have a planning variable so it terminates the chain). The important thing to notice is that this way the chain is built in the opposite direction than the vehicle (anchor) goes through the visits. But as a programmer, when you work with the solution, when you visualize or analyze it, you start with a vehicle and go over its visits in order that is opposite to how the chain is represented. @InverseRelationShadowVariable makes this possible without you having to do any extra work. Another shadow variable is the @AnchorShadowVariable that holds the anchor of the chain for each element in the chain, again, with no extra effort from the programmer. This variable makes it easier to write the capacity constraint.
+
+## 2.2. Models
 [Planner Model](https://lucid.app/lucidchart/eb96d556-7843-4784-81d6-4fac81235fb9/edit?page=.sCE-U~NQ8yl#)
 
 # 3. Impact Analysis
