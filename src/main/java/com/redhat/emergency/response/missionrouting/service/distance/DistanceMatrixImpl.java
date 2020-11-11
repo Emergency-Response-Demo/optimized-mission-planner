@@ -21,26 +21,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import com.redhat.emergency.response.missionrouting.domain.Distance;
 import com.redhat.emergency.response.missionrouting.domain.Location;
 import com.redhat.emergency.response.missionrouting.service.location.DistanceMatrix;
 import com.redhat.emergency.response.missionrouting.service.location.DistanceMatrixRow;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
 
 @ApplicationScoped
 class DistanceMatrixImpl implements DistanceMatrix {
 
-    private final DistanceCalculator distanceCalculator;
-    private final DistanceRepository distanceRepository;
+    @Inject
+    private DistanceCalculator distanceCalculator;
+    // @Inject
+    // private DistanceRepository distanceRepository;
     private final Map<Location, Map<Long, Distance>> matrix = new HashMap<>();
-
-    // @Autowired
-    public DistanceMatrixImpl(DistanceCalculator distanceCalculator, DistanceRepository distanceRepository) {
-        this.distanceCalculator = distanceCalculator;
-        this.distanceRepository = distanceRepository;
-    }
 
     @Override
     public DistanceMatrixRow addLocation(Location newLocation) {
@@ -85,11 +80,11 @@ class DistanceMatrixImpl implements DistanceMatrix {
     }
 
     private Distance calculateOrRestoreDistance(Location from, Location to) {
-        long distance = distanceRepository.getDistance(from, to);
-        if (distance < 0) {
-            distance = distanceCalculator.travelTimeMillis(from.coordinates(), to.coordinates());
-            distanceRepository.saveDistance(from, to, distance);
-        }
+        // long distance = distanceRepository.getDistance(from, to);
+        // if (distance < 0) {
+            long distance = distanceCalculator.travelTimeMillis(from.coordinates(), to.coordinates());
+            // distanceRepository.saveDistance(from, to, distance);
+        // }
         return Distance.ofMillis(distance);
     }
 
@@ -101,13 +96,13 @@ class DistanceMatrixImpl implements DistanceMatrix {
         //  leak.
         //  But this probably requires making DistanceMatrixRow immutable (otherwise there's a risk of NPEs in solver)
         //  and update PlanningLocations' distance maps through problem fact changes.
-        distanceRepository.deleteDistances(location);
+        // distanceRepository.deleteDistances(location);
     }
 
     @Override
     public void clear() {
         matrix.clear();
-        distanceRepository.deleteAll();
+        // distanceRepository.deleteAll();
     }
 
     /**

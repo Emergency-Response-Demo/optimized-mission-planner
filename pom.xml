@@ -60,6 +60,11 @@
       <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.graphhopper</groupId>
+      <artifactId>graphhopper-reader-osm</artifactId>
+      <version>${version.com.graphhopper}</version>
+    </dependency>    
+    <dependency>
       <groupId>com.neovisionaries</groupId>
       <artifactId>nv-i18n</artifactId>
       <version>${version.com.neovisionaries}</version>
