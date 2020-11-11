@@ -38,8 +38,8 @@ public class RoutingPlan {
 
     private final Distance distance;
     private final List<Vehicle> vehicles;
-    private final Location depot;
-    private final List<Location> visits;
+    private final Location evacuationCenter;
+    private final List<Location> incidents;
     private final List<RouteWithTrack> routes;
 
     /**
@@ -47,24 +47,24 @@ public class RoutingPlan {
      *
      * @param distance the overall travel distance
      * @param vehicles all available vehicles
-     * @param depot the depot (may be {@code null})
-     * @param visits all visits
+     * @param evacuationCenter the evacuationCenter (may be {@code null})
+     * @param incidents all incidents
      * @param routes routes of all vehicles
      */
     public RoutingPlan(
             Distance distance,
             List<Vehicle> vehicles,
-            Location depot,
-            List<Location> visits,
+            Location evacuationCenter,
+            List<Location> incidents,
             List<RouteWithTrack> routes) {
         this.distance = Objects.requireNonNull(distance);
         this.vehicles = new ArrayList<>(Objects.requireNonNull(vehicles));
-        this.depot = depot;
-        this.visits = new ArrayList<>(Objects.requireNonNull(visits));
+        this.evacuationCenter = evacuationCenter;
+        this.incidents = new ArrayList<>(Objects.requireNonNull(incidents));
         this.routes = new ArrayList<>(Objects.requireNonNull(routes));
-        if (depot == null) {
+        if (evacuationCenter == null) {
             if (!routes.isEmpty()) {
-                throw new IllegalArgumentException("Routes must be empty when depot is null");
+                throw new IllegalArgumentException("Routes must be empty when evacuationCenter is null");
             }
         } else if (routes.size() != vehicles.size()) {
             throw new IllegalArgumentException(describeVehiclesRoutesInconsistency(
@@ -74,20 +74,20 @@ public class RoutingPlan {
                     "Some routes are assigned to non-existent vehicles", vehicles, routes));
         } else if (!routes.isEmpty()) {
             List<Location> visited = routes.stream()
-                    .map(Route::visits)
+                    .map(Route::incidents)
                     .flatMap(Collection::stream)
                     .collect(toList());
-            ArrayList<Location> unvisited = new ArrayList<>(visits);
+            ArrayList<Location> unvisited = new ArrayList<>(incidents);
             unvisited.removeAll(visited);
             if (!unvisited.isEmpty()) {
                 // This happens because we're also publishing solutions that are not fully initialized.
                 // TODO decide whether this allowed or not
-                logger.warn("Some visits are unvisited: {}", unvisited);
+                logger.warn("Some incidents are unvisited: {}", unvisited);
             }
-            visited.removeAll(visits);
+            visited.removeAll(incidents);
             if (!visited.isEmpty()) {
                 throw new IllegalArgumentException(
-                        "Some routes are going through visits that haven't been defined: " + visited);
+                        "Some routes are going through incidents that haven't been defined: " + visited);
             }
         }
     }
@@ -138,39 +138,39 @@ public class RoutingPlan {
     }
 
     /**
-     * Routes of all vehicles in the depot. Includes empty routes of vehicles that stay in the depot.
+     * Routes of all vehicles in the evacuationCenter. Includes empty routes of vehicles that stay in the evacuationCenter.
      *
-     * @return all routes (may be empty when there is no depot or no vehicles)
+     * @return all routes (may be empty when there is no evacuationCenter or no vehicles)
      */
     public List<RouteWithTrack> routes() {
         return Collections.unmodifiableList(routes);
     }
 
     /**
-     * All visits that are part of the routing problem.
+     * All incidents that are part of the routing problem.
      *
-     * @return all visits
+     * @return all incidents
      */
-    public List<Location> visits() {
-        return Collections.unmodifiableList(visits);
+    public List<Location> incidents() {
+        return Collections.unmodifiableList(incidents);
     }
 
     /**
-     * The depot.
+     * The evacuationCenter.
      *
-     * @return depot (may be missing)
+     * @return evacuationCenter (may be missing)
      */
-    public Optional<Location> depot() {
-        return Optional.ofNullable(depot);
+    public Optional<Location> evacuationCenter() {
+        return Optional.ofNullable(evacuationCenter);
     }
 
     /**
-     * Routing plan is empty when there is no depot, no vehicles and no routes.
+     * Routing plan is empty when there is no evacuationCenter, no vehicles and no routes.
      *
      * @return {@code true} if the plan is empty
      */
     public boolean isEmpty() {
-        // No need to check routes. No depot => no routes.
-        return depot == null && vehicles.isEmpty();
+        // No need to check routes. No evacuationCenter => no routes.
+        return evacuationCenter == null && vehicles.isEmpty();
     }
 }

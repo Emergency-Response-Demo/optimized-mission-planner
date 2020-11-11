@@ -104,7 +104,7 @@ public class PlanningIncident implements Standstill {
      * Distance from the previous standstill to this Incident. This is used to calculate the travel cost of a chain
      * beginning with a vehicle (at a depot) and ending with the {@link #isLast() last} Incident.
      * The chain ends with a Incident, not a depot so the cost of returning from the last Incident back to the depot
-     * has to be added in a separate step using {@link #distanceToDepot()}.
+     * has to be added in a separate step using {@link #distanceToEvacuationCenter()}.
      *
      * @return distance from previous standstill to this Incident
      */
@@ -121,7 +121,7 @@ public class PlanningIncident implements Standstill {
      *
      * @return distance from this Incident back its vehicle's depot
      */
-    public long distanceToDepot() {
+    public long distanceToEvacuationCenter() {
         return location.distanceTo(vehicle.getLocation());
     }
 

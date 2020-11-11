@@ -24,41 +24,41 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Vehicle's itinerary (sequence of visits) and its depot. This entity cannot exist without the vehicle and the depot
- * but it's allowed to have no visits when the vehicle hasn't been assigned any (it's idle).
+ * Vehicle's itinerary (sequence of incidents) and its evacuationCenter. This entity cannot exist without the vehicle and the evacuationCenter
+ * but it's allowed to have no incidents when the vehicle hasn't been assigned any (it's idle).
  * <p>
  * This entity describes part of a {@link RoutingPlan solution} of the vehicle routing problem
- * (assignment of a subset of visits to one of the vehicles).
- * It doesn't carry the data about physical tracks between adjacent visits.
+ * (assignment of a subset of incidents to one of the vehicles).
+ * It doesn't carry the data about physical tracks between adjacent incidents.
  * Geographical data is held by {@link RouteWithTrack}.
  */
 public class Route {
 
     private final Vehicle vehicle;
-    private final Location depot;
-    private final List<Location> visits;
+    private final Location evacuationCenter;
+    private final List<Location> incidents;
 
     /**
      * Create a vehicle route.
      *
      * @param vehicle the vehicle assigned to this route (not {@code null})
-     * @param depot vehicle's depot (not {@code null})
-     * @param visits list of visits (not {@code null})
+     * @param evacuationCenter vehicle's evacuationCenter (not {@code null})
+     * @param incidents list of incidents (not {@code null})
      */
-    public Route(Vehicle vehicle, Location depot, List<Location> visits) {
+    public Route(Vehicle vehicle, Location evacuationCenter, List<Location> incidents) {
         this.vehicle = Objects.requireNonNull(vehicle);
-        this.depot = Objects.requireNonNull(depot);
-        this.visits = new ArrayList<>(Objects.requireNonNull(visits));
-        // TODO Probably remove this check when we have more types: new Route(Depot depot, List<Visit> visits).
-        //      Then visits obviously cannot contain the depot. But will we still require that no visit has the same
-        //      location as the depot? (I don't think so).
-        if (visits.contains(depot)) {
-            throw new IllegalArgumentException("Depot (" + depot + ") must not be one of the visits (" + visits + ")");
+        this.evacuationCenter = Objects.requireNonNull(evacuationCenter);
+        this.incidents = new ArrayList<>(Objects.requireNonNull(incidents));
+        // TODO Probably remove this check when we have more types: new Route(Depot evacuationCenter, List<Visit> incidents).
+        //      Then incidents obviously cannot contain the evacuationCenter. But will we still require that no visit has the same
+        //      location as the evacuationCenter? (I don't think so).
+        if (incidents.contains(evacuationCenter)) {
+            throw new IllegalArgumentException("Depot (" + evacuationCenter + ") must not be one of the incidents (" + incidents + ")");
         }
-        long uniqueVisits = visits.stream().distinct().count();
-        if (uniqueVisits < visits.size()) {
-            long duplicates = visits.size() - uniqueVisits;
-            throw new IllegalArgumentException("Some visits have been visited multiple times (" + duplicates + ")");
+        long uniqueVisits = incidents.stream().distinct().count();
+        if (uniqueVisits < incidents.size()) {
+            long duplicates = incidents.size() - uniqueVisits;
+            throw new IllegalArgumentException("Some incidents have been visited multiple times (" + duplicates + ")");
         }
     }
 
@@ -74,27 +74,27 @@ public class Route {
     /**
      * Depot in which the route starts and ends.
      *
-     * @return route's depot (never {@code null})
+     * @return route's evacuationCenter (never {@code null})
      */
-    public Location depot() {
-        return depot;
+    public Location evacuationCenter() {
+        return evacuationCenter;
     }
 
     /**
-     * List of vehicle's visits (not including the depot).
+     * List of vehicle's incidents (not including the evacuationCenter).
      *
-     * @return list of visits
+     * @return list of incidents
      */
-    public List<Location> visits() {
-        return Collections.unmodifiableList(visits);
+    public List<Location> incidents() {
+        return Collections.unmodifiableList(incidents);
     }
 
     @Override
     public String toString() {
         return "Route{" +
                 "vehicle=" + vehicle +
-                ", depot=" + depot.id() +
-                ", visits=" + visits.stream().map(Location::id).collect(toList()) +
+                ", evacuationCenter=" + evacuationCenter.id() +
+                ", incidents=" + incidents.stream().map(Location::id).collect(toList()) +
                 '}';
     }
 }

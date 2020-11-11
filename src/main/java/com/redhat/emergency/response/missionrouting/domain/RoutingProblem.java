@@ -28,26 +28,26 @@ public class RoutingProblem {
 
     private final String name;
     private final List<VehicleData> vehicles;
-    private final LocationData depot;
-    private final List<LocationData> visits;
+    private final LocationData evacuationCenter;
+    private final List<LocationData> incidents;
 
     /**
      * Create routing problem instance.
      *
      * @param name the instance name
      * @param vehicles list of vehicles (not {@code null})
-     * @param depot the depot (may be {@code null} if there is no depot)
-     * @param visits list of visits (not {@code null})
+     * @param evacuationCenter the evacuationCenter (may be {@code null} if there is no evacuationCenter)
+     * @param incidents list of incidents (not {@code null})
      */
     public RoutingProblem(
             String name,
             List<? extends VehicleData> vehicles,
-            LocationData depot,
-            List<? extends LocationData> visits) {
+            LocationData evacuationCenter,
+            List<? extends LocationData> incidents) {
         this.name = Objects.requireNonNull(name);
         this.vehicles = new ArrayList<>(Objects.requireNonNull(vehicles));
-        this.depot = depot;
-        this.visits = new ArrayList<>(Objects.requireNonNull(visits));
+        this.evacuationCenter = evacuationCenter;
+        this.incidents = new ArrayList<>(Objects.requireNonNull(incidents));
     }
 
     /**
@@ -60,21 +60,21 @@ public class RoutingProblem {
     }
 
     /**
-     * Get the depot.
+     * Get the evacuationCenter.
      *
-     * @return depot (never {@code null})
+     * @return evacuationCenter (never {@code null})
      */
-    public Optional<LocationData> depot() {
-        return Optional.ofNullable(depot);
+    public Optional<LocationData> evacuationCenter() {
+        return Optional.ofNullable(evacuationCenter);
     }
 
     /**
      * Get locations that should be visited.
      *
-     * @return visits
+     * @return incidents
      */
-    public List<LocationData> visits() {
-        return visits;
+    public List<LocationData> incidents() {
+        return incidents;
     }
 
     /**

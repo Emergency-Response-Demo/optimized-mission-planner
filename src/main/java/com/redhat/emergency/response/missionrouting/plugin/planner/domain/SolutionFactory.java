@@ -31,7 +31,7 @@ public class SolutionFactory {
     }
 
     /**
-     * Create an empty solution. Empty solution has zero locations, depots, visits and vehicles and a zero score.
+     * Create an empty solution. Empty solution has zero locations, evacuationCenters, incidents and vehicles and a zero score.
      *
      * @return empty solution
      */
@@ -45,8 +45,8 @@ public class SolutionFactory {
     }
 
     /**
-     * Create a new solution from given vehicles, depot and visits.
-     * All vehicles will be placed in the depot.
+     * Create a new solution from given vehicles, evacuationCenter and incidents.
+     * All vehicles will be placed in the evacuationCenter.
      * <p>
      * The returned solution's vehicles and locations are new collections so modifying the solution
      * won't affect the collections given as arguments.
@@ -54,27 +54,25 @@ public class SolutionFactory {
      * <strong><em>Elements of the argument collections are NOT cloned.</em></strong>
      *
      * @param vehicles vehicles
-     * @param depot depot
-     * @param visits visits
-     * @return solution containing the given vehicles, depot, visits and their locations
+     * @param evacuationCenter evacuationCenter
+     * @param incidents incidents
+     * @return solution containing the given vehicles, evacuationCenter, incidents and their locations
      */
     public static MissionRoutingSolution solutionFromIncidents(
             List<PlanningVehicle> vehicles,
-            PlanningEvacuationCenter depot,
-            List<PlanningIncident> visits) {
+            List<PlanningEvacuationCenter> evacuationCenters,
+            List<PlanningIncident> incidents) {
+
         MissionRoutingSolution solution = new MissionRoutingSolution();
         solution.setVehicleList(new ArrayList<>(vehicles));
-        solution.setEvacuationCenterList(new ArrayList<>(1));
-        if (depot != null) {
-            solution.getEvacuationCenterList().add(depot);
-            moveAllVehiclesToEvacuationCenter(vehicles, depot);
-        }
-        solution.setIncidentList(new ArrayList<>(visits));
+        solution.setEvacuationCenterList(evacuationCenters);
+        solution.setIncidentList(new ArrayList<>(incidents));
         solution.setScore(HardSoftLongScore.ZERO);
+        
         return solution;
     }
 
-    private static void moveAllVehiclesToEvacuationCenter(List<PlanningVehicle> vehicles, PlanningEvacuationCenter depot) {
-        vehicles.forEach(vehicle -> vehicle.setEvacuationCenter(depot));
+    private static void moveAllVehiclesToEvacuationCenter(List<PlanningVehicle> vehicles, PlanningEvacuationCenter evacuationCenter) {
+        vehicles.forEach(vehicle -> vehicle.setEvacuationCenter(evacuationCenter));
     }
 }
