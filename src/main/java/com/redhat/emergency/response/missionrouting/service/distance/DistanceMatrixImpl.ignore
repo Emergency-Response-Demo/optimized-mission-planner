@@ -37,7 +37,7 @@ class DistanceMatrixImpl implements DistanceMatrix {
     private final Map<Location, Map<Long, Distance>> matrix = new HashMap<>();
 
     // @Autowired
-    DistanceMatrixImpl(DistanceCalculator distanceCalculator, DistanceRepository distanceRepository) {
+    public DistanceMatrixImpl(DistanceCalculator distanceCalculator, DistanceRepository distanceRepository) {
         this.distanceCalculator = distanceCalculator;
         this.distanceRepository = distanceRepository;
     }

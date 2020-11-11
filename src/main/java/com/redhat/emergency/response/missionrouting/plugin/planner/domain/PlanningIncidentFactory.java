@@ -28,35 +28,35 @@ public class PlanningIncidentFactory {
     }
 
     /**
-     * Create visit with {@link #DEFAULT_VISIT_DEMAND}.
+     * Create incident with {@link #DEFAULT_VISIT_DEMAND}.
      *
-     * @param location visit's location
-     * @return new visit with the default demand
+     * @param location incident's location
+     * @return new incident with the default demand
      */
     public static PlanningIncident fromLocation(PlanningLocation location) {
         return fromLocation(location, DEFAULT_VISIT_DEMAND);
     }
 
     /**
-     * Create visit of a location with the given demand.
+     * Create incident of a location with the given demand.
      *
-     * @param location visit's location
-     * @param demand visit's demand
-     * @return visit with demand at the given location
+     * @param location incident's location
+     * @param demand incident's demand
+     * @return incident with demand at the given location
      */
     public static PlanningIncident fromLocation(PlanningLocation location, int demand) {
-        PlanningIncident visit = new PlanningIncident();
-        visit.setId(location.getId());
-        visit.setLocation(location);
-        visit.setDemand(demand);
-        return visit;
+        PlanningIncident incident = new PlanningIncident();
+        incident.setId(location.getId());
+        incident.setLocation(location);
+        incident.setDemand(demand);
+        return incident;
     }
 
     /**
-     * Create a test visit with the given ID.
+     * Create a test incident with the given ID.
      *
-     * @param id ID of the visit and its location
-     * @return visit with an ID only
+     * @param id ID of the incident and its location
+     * @return incident with an ID only
      */
     public static PlanningIncident testVisit(long id) {
         return fromLocation(PlanningLocationFactory.testLocation(id));
