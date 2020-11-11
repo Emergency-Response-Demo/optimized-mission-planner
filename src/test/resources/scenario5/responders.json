@@ -1,14 +1,23 @@
-[
-  {
-    "id": "35",
-    "name": "Jose Hernandez",
-    "phoneNumber": "(828) 555-1972",
-    "latitude": 34.16616,
-    "longitude": -77.88472,
-    "boatCapacity": 13,
-    "medicalKit": true,
-    "available": true,
-    "person": false,
-    "enrolled": true
-  }
-]
+{
+   "id": "d1f5b2e3-1596-4f36-9527-95fbcdf5f08a",
+   "messageType": "RespondersCreatedEvent",
+   "invokingService": "ResponderService",
+   "timestamp": 1605019304165,
+   "header": {},
+   "body": {
+      "created": 25,
+      "responders": [
+         {
+            "id": "26",
+            "name": "Jose Hernandez",
+            "phoneNumber": "(828) 555-1972",
+            "latitude": 34.16616,
+            "longitude": -77.88472,
+            "boatCapacity": 13,
+            "medicalKit": true,
+            "available": true,
+            "person": false,
+         }
+      ]
+   }
+}
