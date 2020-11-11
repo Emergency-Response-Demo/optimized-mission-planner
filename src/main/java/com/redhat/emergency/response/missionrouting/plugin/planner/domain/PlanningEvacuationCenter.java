@@ -37,7 +37,7 @@ public class PlanningEvacuationCenter {
     @Override
     public String toString() {
         return "PlanningEvacuationCenter{" +
-                "location=" + location.getId() +
+                "location=" + location +
                 '}';
     }
 }

@@ -99,7 +99,7 @@ public class PlanningVehicle implements Standstill {
     public String toString() {
         return "PlanningVehicle{" +
                 "capacity=" + capacity +
-                (evacuationCenter == null ? "" : ",evacuationCenter=" + evacuationCenter.getId()) +
+                (evacuationCenter == null ? "" : ",evacuationCenter=" + evacuationCenter ) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 ",id=" + id +
                 '}';

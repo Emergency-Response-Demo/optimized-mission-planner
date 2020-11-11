@@ -21,10 +21,15 @@ import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.redhat.emergency.response.missionrouting.plugin.planner.weight.EvacuationCenterAngleIncidentDifficultyWeightFactory;
 
 @PlanningEntity(difficultyWeightFactoryClass = EvacuationCenterAngleIncidentDifficultyWeightFactory.class)
 public class PlanningIncident implements Standstill {
+
+    private static final Logger logger = LoggerFactory.getLogger(PlanningIncident.class);
 
     @PlanningId
     private long id;
@@ -102,8 +107,8 @@ public class PlanningIncident implements Standstill {
 
     /**
      * Distance from the previous standstill to this Incident. This is used to calculate the travel cost of a chain
-     * beginning with a vehicle (at a depot) and ending with the {@link #isLast() last} Incident.
-     * The chain ends with a Incident, not a depot so the cost of returning from the last Incident back to the depot
+     * beginning with a vehicle (at a evacuationCenter) and ending with the {@link #isLast() last} Incident.
+     * The chain ends with a Incident, not a evacuationCenter so the cost of returning from the last Incident back to the evacuationCenter
      * has to be added in a separate step using {@link #distanceToEvacuationCenter()}.
      *
      * @return distance from previous standstill to this Incident
@@ -113,13 +118,14 @@ public class PlanningIncident implements Standstill {
             throw new IllegalStateException(
                     "This method must not be called when the previousStandstill (null) is not initialized yet.");
         }
+        logger.info("previousStandstill={}", previousStandstill);
         return previousStandstill.getLocation().distanceTo(location);
     }
 
     /**
-     * Distance from this Incident back to the depot.
+     * Distance from this Incident back to the evacuationCenter.
      *
-     * @return distance from this Incident back its vehicle's depot
+     * @return distance from this Incident back its vehicle's evacuationCenter
      */
     public long distanceToEvacuationCenter() {
         return location.distanceTo(vehicle.getLocation());
@@ -137,7 +143,7 @@ public class PlanningIncident implements Standstill {
     @Override
     public String toString() {
         return "PlanningIncident{" +
-                (location == null ? "" : "location=" + location.getId()) +
+                (location == null ? "" : "location=" + location ) +
                 ",demand=" + demand +
                 // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
                 (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +
