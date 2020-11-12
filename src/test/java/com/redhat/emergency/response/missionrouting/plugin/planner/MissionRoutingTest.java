@@ -2,12 +2,13 @@ package com.redhat.emergency.response.missionrouting.plugin.planner;
 
 import io.quarkus.test.junit.QuarkusTest;
 
-import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.api.solver.SolverStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -36,7 +37,7 @@ import com.redhat.emergency.response.missionrouting.service.location.DistanceMat
 
 @QuarkusTest
 public class MissionRoutingTest {
-    private static final Logger LOG = Logger.getLogger(MissionRoutingTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MissionRoutingTest.class);
     
     @Inject
     SolverFactory<MissionRoutingSolution> solverFactory;
@@ -81,7 +82,7 @@ public class MissionRoutingTest {
             PlanningLocation pSpringfield = createPlannigLocation(50L, BigDecimal.valueOf(42.1014831), BigDecimal.valueOf(-72.589811), "Springfield, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pSpringfield, 5));
 
-            PlanningLocation pDennis = createPlannigLocation(50L, BigDecimal.valueOf(41.7353872), BigDecimal.valueOf(-70.1939087), "Dennis, MA");
+            PlanningLocation pDennis = createPlannigLocation(60L, BigDecimal.valueOf(41.7353872), BigDecimal.valueOf(-70.1939087), "Dennis, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pDennis, 3));
             
             //print the current distance matrix

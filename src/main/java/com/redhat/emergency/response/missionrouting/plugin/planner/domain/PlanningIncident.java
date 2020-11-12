@@ -144,8 +144,8 @@ public class PlanningIncident implements Standstill {
         return "PlanningIncident{" +
                 (location == null ? "" : "location=" + location ) +
                 ",demand=" + demand +
-                // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
-                (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +
+                (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
+                // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 (vehicle == null ? "" : ",vehicle=" + vehicle.getId()) +
                 ",id=" + id +
