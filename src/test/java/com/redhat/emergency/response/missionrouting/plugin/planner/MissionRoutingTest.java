@@ -58,50 +58,30 @@ public class MissionRoutingTest {
         List<PlanningEvacuationCenter> shelters = new ArrayList<>();
 
         try {
-            Location loganAirport = 
-                new Location(1L, new Coordinates(BigDecimal.valueOf(42.3663473), BigDecimal.valueOf(-71.0202646)), "Shelter at LOGAN AIRPORT");
-            DistanceMatrixRow loganAirportDMR = distanceMatrix.addLocation(loganAirport);
-            PlanningLocation pLoganAirport = PlanningLocationFactory.fromDomain(loganAirport, new DistanceMapImpl(loganAirportDMR));
-
+            PlanningLocation pLoganAirport = createPlannigLocation(10L, BigDecimal.valueOf(42.3663473), BigDecimal.valueOf(-71.0202646), "Shelter at LOGAN AIRPORT");
             PlanningVehicle boat1 = PlanningVehicleFactory.testVehicle(1L, 10);
             PlanningEvacuationCenter loganshelter = new PlanningEvacuationCenter( pLoganAirport );
             shelters.add(loganshelter);
             boat1.setEvacuationCenter( loganshelter );
             boats.add( boat1 );
 
-            Location pittsfield = 
-                new Location(2L, new Coordinates(BigDecimal.valueOf(42.4507686), BigDecimal.valueOf(-73.3304686)), "Pittsfield, MA");
-            DistanceMatrixRow pittsfieldDMR = distanceMatrix.addLocation(pittsfield);
-            PlanningLocation pPittsfield = PlanningLocationFactory.fromDomain(pittsfield, new DistanceMapImpl(pittsfieldDMR));
-
+            PlanningLocation pPittsfield = createPlannigLocation(20L, BigDecimal.valueOf(42.4507686), BigDecimal.valueOf(-73.3304686), "Shelter at LOGAN AIRPORT");
             PlanningVehicle boat2 = PlanningVehicleFactory.testVehicle(2L, 10);
             PlanningEvacuationCenter pittisfieldShelter = new PlanningEvacuationCenter( pPittsfield );
             shelters.add(pittisfieldShelter);
             boat2.setEvacuationCenter( pittisfieldShelter );
             boats.add( boat2 );
 
-            Location dracut = 
-                new Location(3L, new Coordinates(BigDecimal.valueOf(42.6818928), BigDecimal.valueOf(-71.2963726)), "Dracut, MA");
-            DistanceMatrixRow dracutDMR = distanceMatrix.addLocation(dracut);
-            PlanningLocation pDracut = PlanningLocationFactory.fromDomain(dracut, new DistanceMapImpl(dracutDMR));
+            PlanningLocation pDracut = createPlannigLocation(30L, BigDecimal.valueOf(42.6818928), BigDecimal.valueOf(-71.2963726), "Dracut, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pDracut, 5));
 
-            Location greefield = 
-                new Location(4L, new Coordinates(BigDecimal.valueOf(42.6097476), BigDecimal.valueOf(-72.5979752)), "Greenfield, MA");
-            DistanceMatrixRow greenfieldDMR = distanceMatrix.addLocation(greefield);
-            PlanningLocation pGreenfield = PlanningLocationFactory.fromDomain(greefield, new DistanceMapImpl(greenfieldDMR));
+            PlanningLocation pGreenfield = createPlannigLocation(40L, BigDecimal.valueOf(42.6097476), BigDecimal.valueOf(-72.5979752), "Greenfield, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pGreenfield, 7));
 
-            Location springfield = 
-                new Location(5L, new Coordinates(BigDecimal.valueOf(42.1014831), BigDecimal.valueOf(-72.589811)), "Springfield, MA");
-            DistanceMatrixRow springfieldDMR = distanceMatrix.addLocation(springfield);
-            PlanningLocation pSpringfield = PlanningLocationFactory.fromDomain(springfield, new DistanceMapImpl(springfieldDMR));
+            PlanningLocation pSpringfield = createPlannigLocation(50L, BigDecimal.valueOf(42.1014831), BigDecimal.valueOf(-72.589811), "Springfield, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pSpringfield, 5));
 
-            Location dennis = 
-                new Location(6L, new Coordinates(BigDecimal.valueOf(41.7353872), BigDecimal.valueOf(-70.1939087)), "Dennis, MA");
-            DistanceMatrixRow dennisDMR = distanceMatrix.addLocation(dennis);
-            PlanningLocation pDennis = PlanningLocationFactory.fromDomain(dennis, new DistanceMapImpl(dennisDMR));
+            PlanningLocation pDennis = createPlannigLocation(50L, BigDecimal.valueOf(41.7353872), BigDecimal.valueOf(-70.1939087), "Dennis, MA");
             incidents.add(PlanningIncidentFactory.fromLocation(pDennis, 3));
             
             //print the current distance matrix
@@ -115,6 +95,12 @@ public class MissionRoutingTest {
         }        
 
         LOG.info("Finish test!");        
+    }
+
+    private PlanningLocation createPlannigLocation(long id, BigDecimal lat, BigDecimal lon, String description) {
+        Location location = new Location(id, new Coordinates(lat, lon), description);
+        DistanceMatrixRow locationDMR = distanceMatrix.addLocation(location);
+        return PlanningLocationFactory.fromDomain(location, new DistanceMapImpl(locationDMR));
     }
 
 }
