@@ -23,6 +23,7 @@ import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
 import com.redhat.emergency.response.missionrouting.plugin.planner.domain.PlanningIncident;
+import com.redhat.emergency.response.missionrouting.plugin.planner.domain.PlanningVehicle;
 
 public class MissionRoutingConstraintProvider implements ConstraintProvider {
 
@@ -31,7 +32,8 @@ public class MissionRoutingConstraintProvider implements ConstraintProvider {
         return new Constraint[] {
                 vehicleCapacity(constraintFactory),
                 distanceFromPreviousStandstill(constraintFactory),
-                distanceFromLastIncidentToTheClosestEvacuationCenter(constraintFactory)
+                // distanceFromLastIncidentToTheClosestEvacuationCenter(constraintFactory)
+                distanceFromIncidentToTheClosestEvacuationCenter(constraintFactory)
         };
     }
 
@@ -62,11 +64,19 @@ public class MissionRoutingConstraintProvider implements ConstraintProvider {
 //                         PlanningIncident::distanceToVehicleInitialLocation);
 //     }
 
-    Constraint distanceFromLastIncidentToTheClosestEvacuationCenter(ConstraintFactory constraintFactory) {
+//     Constraint distanceFromLastIncidentToTheClosestEvacuationCenter(ConstraintFactory constraintFactory) {
+//         return constraintFactory.from(PlanningIncident.class)
+//                 .filter(incident -> incident.isLast() && incident.hasVehicle())
+//                 .penalizeLong(
+//                         "distance from last incident to the closest evacuation center",
+//                         HardSoftLongScore.ONE_SOFT,
+//                         PlanningIncident::distanceToClosestEvacuationCenter);
+//     }
+
+    Constraint distanceFromIncidentToTheClosestEvacuationCenter(ConstraintFactory constraintFactory) {
         return constraintFactory.from(PlanningIncident.class)
-                .filter(incident -> incident.isLast() && incident.hasVehicle())
                 .penalizeLong(
-                        "distance from last incident to the closest evacuation center",
+                        "distance from the incident location to its closest evacuation center",
                         HardSoftLongScore.ONE_SOFT,
                         PlanningIncident::distanceToClosestEvacuationCenter);
     }

@@ -40,6 +40,8 @@ public class PlanningIncident implements Standstill {
     @PlanningVariable(valueRangeProviderRefs = { "vehicleRange", "incidentRange" },
             graphType = PlanningVariableGraphType.CHAINED)
     private Standstill previousStandstill;
+    @PlanningVariable(valueRangeProviderRefs = "evacuationCenterRange", nullable = false)
+    private PlanningEvacuationCenter evacuationCenter;
 
     // Shadow variables
     private PlanningIncident nextIncident;
@@ -101,6 +103,14 @@ public class PlanningIncident implements Standstill {
         this.vehicle = vehicle;
     }
 
+	public PlanningEvacuationCenter getEvacuationCenter() {
+		return evacuationCenter;
+	}
+
+	public void setEvacuationCenter(PlanningEvacuationCenter evacuationCenter) {
+		this.evacuationCenter = evacuationCenter;
+    }
+    
     // ************************************************************************
     // Complex methods
     // ************************************************************************
@@ -136,12 +146,12 @@ public class PlanningIncident implements Standstill {
      * @return distance from this Incident to the closest Evacuation Center.
      */
     public long distanceToClosestEvacuationCenter() {
-        return location.distanceTo(vehicle.getEvacuationCenter().getLocation());
+        return location.distanceTo(evacuationCenter.getLocation());
     }
 
-    public boolean hasVehicle() {
-        return vehicle.getEvacuationCenter() != null;
-    }
+    // public boolean hasVehicle() {
+    //     return vehicle.getEvacuationCenter() != null;
+    // }
 
     /**
      * Whether this Incident is the last in a chain.
@@ -159,9 +169,11 @@ public class PlanningIncident implements Standstill {
                 ",demand=" + demand +
                 (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
                 // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +
+                (evacuationCenter == null ? "" : ",evacuationCenter=[" + evacuationCenter.getLocation().getId() + "]" + evacuationCenter.getLocation().getDescription() ) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 (vehicle == null ? "" : ",vehicle=" + vehicle.getId()) +
                 ",id=" + id +
                 '}';
     }
+
 }

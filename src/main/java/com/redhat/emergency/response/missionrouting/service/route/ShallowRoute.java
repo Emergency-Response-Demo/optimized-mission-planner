@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import com.redhat.emergency.response.missionrouting.plugin.planner.domain.PlanningEvacuationCenter;
+import com.redhat.emergency.response.missionrouting.plugin.planner.domain.PlanningVehicle;
+
 // TODO maybe remove this once we fork planning domain from optaplanner-examples
 // because then we can hold a reference to the original location
 
@@ -38,13 +41,13 @@ import java.util.stream.Stream;
 public class ShallowRoute {
 
     /**
-     * Vehicle ID.
+     * Vehicle.
      */
-    public final long vehicleId;
+    public final PlanningVehicle vehicle;
     /**
-     * Depot ID.
+     * EvacuationCenter.
      */
-    public final long evacuationCenterId;
+    public final PlanningEvacuationCenter evacuationCenter;
     /**
      * Visit IDs (immutable, never {@code null}).
      */
@@ -54,22 +57,23 @@ public class ShallowRoute {
     /**
      * Create shallow route.
      *
-     * @param vehicleId vehicle ID
-     * @param evacuationCenterId evacuationCenter ID
+     * @param vehicle vehicle
+     * @param evacuationCenter evacuationCenter
      * @param incidentIds incident IDs
      */
-    public ShallowRoute(long vehicleId, long evacuationCenterId, List<String> incidentIds) {
-        this.vehicleId = vehicleId;
-        this.evacuationCenterId = evacuationCenterId;
+    public ShallowRoute(PlanningVehicle vehicle, PlanningEvacuationCenter evacuationCenter, List<String> incidentIds) {
+        this.vehicle = vehicle;
+        this.evacuationCenter = evacuationCenter;
         this.incidentIds = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(incidentIds)));
     }
 
     @Override
     public String toString() {
-        String route = Stream.concat(Stream.of(evacuationCenterId), incidentIds.stream())
+        String vehicleLocation = vehicle.getLocation().getDescription();
+        String route = Stream.concat(Stream.of(vehicleLocation), incidentIds.stream())
                 .map(Object::toString)
                 // add the evacuationCenterId as the last "incident" in the trip
-                .collect(joining("->", "[", " --> " + evacuationCenterId + "]"));
-        return vehicleId + ": " + route;
+                .collect(joining("->", "[", " --> " + evacuationCenter.getLocation().getDescription() + "("+ evacuationCenter.getId() +")" + "]"));
+        return "[" + vehicle.getId() + "]" + vehicle.getLocation().getDescription() + ": " + route;
     }
 }

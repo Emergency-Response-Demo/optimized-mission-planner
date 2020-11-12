@@ -19,6 +19,7 @@ package com.redhat.emergency.response.missionrouting.plugin.planner.domain;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
@@ -28,8 +29,8 @@ public class PlanningVehicle implements Standstill {
     private long id;
     private String description;
     private int capacity;
-    @PlanningVariable(valueRangeProviderRefs = "evacuationCenter", nullable = false)
-    private PlanningEvacuationCenter evacuationCenter;
+    // @PlanningVariable(valueRangeProviderRefs = "evacuationCenterRange", nullable = false)
+    // private PlanningEvacuationCenter evacuationCenter;
     private PlanningLocation location;
 
     // Shadow variables
@@ -55,13 +56,13 @@ public class PlanningVehicle implements Standstill {
         this.capacity = capacity;
     }
 
-    public PlanningEvacuationCenter getEvacuationCenter() {
-        return evacuationCenter;
-    }
+    // public PlanningEvacuationCenter getEvacuationCenter() {
+    //     return evacuationCenter;
+    // }
 
-    public void setEvacuationCenter(PlanningEvacuationCenter evacuationCenter) {
-        this.evacuationCenter = evacuationCenter;
-    }
+    // public void setEvacuationCenter(PlanningEvacuationCenter evacuationCenter) {
+    //     this.evacuationCenter = evacuationCenter;
+    // }
 
     public String getDescription() {
 		return description;
@@ -121,7 +122,7 @@ public class PlanningVehicle implements Standstill {
         return "PlanningVehicle{" +
                 "capacity=" + capacity +
                 (location == null ? "" : ",location=[" + location.getId() + "]" + location.getDescription() ) +
-                (evacuationCenter == null ? "" : ",evacuationCenter=[" + evacuationCenter.getLocation().getId() + "]" + evacuationCenter.getLocation().getDescription() ) +
+                // (evacuationCenter == null ? "" : ",evacuationCenter=[" + evacuationCenter.getLocation().getId() + "]" + evacuationCenter.getLocation().getDescription() ) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 ",id=" + id +
                 '}';

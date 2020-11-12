@@ -108,18 +108,8 @@ class RouteChangedEventPublisher {
             return Collections.emptyList();
         }
         ArrayList<ShallowRoute> routes = new ArrayList<>();
+        PlanningIncident lastIncident = null;
         for (PlanningVehicle vehicle : solution.getVehicleList()) {
-            PlanningEvacuationCenter evacuationCenter = vehicle.getEvacuationCenter();
-            if (evacuationCenter == null) {
-                // throw new IllegalArgumentException(
-                //         "Vehicle (id=" + vehicle.getId() + ") is not in the evacuationCenter. That's not allowed");
-                logger.warn(
-                        "Vehicle (id=" + vehicle.getId() + ") has no evacuationCenter assigned!!!");
-            }
-            else {
-
-            }
-            // List<Long> visits = new ArrayList<>();
             List<String> visits = new ArrayList<>();
             for (PlanningIncident incident : vehicle.getFutureIncidents()) {
                 if (!solution.getIncidentList().contains(incident)) {
@@ -127,9 +117,13 @@ class RouteChangedEventPublisher {
                 }
                 // visits.add(incident.getLocation().getId());
                 visits.add(incident.getLocation().getDescription());
+
+                if (incident.isLast())
+                    lastIncident = incident;
             }
             
-            routes.add(new ShallowRoute(vehicle.getId(), evacuationCenter.getId(), visits));
+            // routes.add(new ShallowRoute(vehicle.getId(), evacuationCenter.getId(), visits));
+            routes.add(new ShallowRoute(vehicle, lastIncident.getEvacuationCenter(), visits));
         }
         return routes;
     }

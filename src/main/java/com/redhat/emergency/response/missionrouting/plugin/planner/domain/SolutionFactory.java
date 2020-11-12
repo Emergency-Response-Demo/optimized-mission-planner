@@ -72,7 +72,7 @@ public class SolutionFactory {
         return solution;
     }
 
-    private static void moveAllVehiclesToEvacuationCenter(List<PlanningVehicle> vehicles, PlanningEvacuationCenter evacuationCenter) {
-        vehicles.forEach(vehicle -> vehicle.setEvacuationCenter(evacuationCenter));
-    }
+    // private static void moveAllVehiclesToEvacuationCenter(List<PlanningVehicle> vehicles, PlanningEvacuationCenter evacuationCenter) {
+    //     vehicles.forEach(vehicle -> vehicle.setEvacuationCenter(evacuationCenter));
+    // }
 }
