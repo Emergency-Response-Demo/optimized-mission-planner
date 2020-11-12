@@ -87,10 +87,10 @@ public class MissionRoutingTest {
             incidents.add(PlanningIncidentFactory.fromLocation(pGreenfield, 3));
 
             PlanningLocation pSpringfield = createPlannigLocation(70L, BigDecimal.valueOf(42.1014831), BigDecimal.valueOf(-72.589811), "Springfield");
-            incidents.add(PlanningIncidentFactory.fromLocation(pSpringfield, 2));
+            incidents.add(PlanningIncidentFactory.fromLocation(pSpringfield, 10));
 
             PlanningLocation pDennis = createPlannigLocation(80L, BigDecimal.valueOf(41.7353872), BigDecimal.valueOf(-70.1939087), "Dennis");
-            incidents.add(PlanningIncidentFactory.fromLocation(pDennis, 10));
+            incidents.add(PlanningIncidentFactory.fromLocation(pDennis, 2));
             
             //print the current distance matrix
             LOG.info(distanceMatrix.toString());

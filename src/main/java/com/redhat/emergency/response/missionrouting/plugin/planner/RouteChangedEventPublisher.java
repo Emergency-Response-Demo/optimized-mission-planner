@@ -123,7 +123,7 @@ class RouteChangedEventPublisher {
             }
             
             // routes.add(new ShallowRoute(vehicle.getId(), evacuationCenter.getId(), visits));
-            routes.add(new ShallowRoute(vehicle, lastIncident.getEvacuationCenter(), visits));
+            routes.add(new ShallowRoute(vehicle, lastIncident.getClosestEvacuationCenter(), visits));
         }
         return routes;
     }

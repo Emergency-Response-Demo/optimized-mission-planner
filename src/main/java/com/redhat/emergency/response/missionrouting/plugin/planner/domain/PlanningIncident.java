@@ -41,7 +41,7 @@ public class PlanningIncident implements Standstill {
             graphType = PlanningVariableGraphType.CHAINED)
     private Standstill previousStandstill;
     @PlanningVariable(valueRangeProviderRefs = "evacuationCenterRange", nullable = false)
-    private PlanningEvacuationCenter evacuationCenter;
+    private PlanningEvacuationCenter closestEvacuationCenter;
 
     // Shadow variables
     private PlanningIncident nextIncident;
@@ -103,12 +103,12 @@ public class PlanningIncident implements Standstill {
         this.vehicle = vehicle;
     }
 
-	public PlanningEvacuationCenter getEvacuationCenter() {
-		return evacuationCenter;
+	public PlanningEvacuationCenter getClosestEvacuationCenter() {
+		return closestEvacuationCenter;
 	}
 
-	public void setEvacuationCenter(PlanningEvacuationCenter evacuationCenter) {
-		this.evacuationCenter = evacuationCenter;
+	public void setClosestEvacuationCenter(PlanningEvacuationCenter closestEvacuationCenter) {
+		this.closestEvacuationCenter = closestEvacuationCenter;
     }
     
     // ************************************************************************
@@ -117,8 +117,8 @@ public class PlanningIncident implements Standstill {
 
     /**
      * Distance from the previous standstill to this Incident. This is used to calculate the travel cost of a chain
-     * beginning with a vehicle (at a evacuationCenter) and ending with the {@link #isLast() last} Incident.
-     * The chain ends with a Incident, not a evacuationCenter so the cost of returning from the last Incident back to the evacuationCenter
+     * beginning with a vehicle (at a closestEvacuationCenter) and ending with the {@link #isLast() last} Incident.
+     * The chain ends with a Incident, not a closestEvacuationCenter so the cost of returning from the last Incident back to the closestEvacuationCenter
      * has to be added in a separate step using {@link #distanceToEvacuationCenter()}.
      *
      * @return distance from previous standstill to this Incident
@@ -146,7 +146,7 @@ public class PlanningIncident implements Standstill {
      * @return distance from this Incident to the closest Evacuation Center.
      */
     public long distanceToClosestEvacuationCenter() {
-        return location.distanceTo(evacuationCenter.getLocation());
+        return location.distanceTo(closestEvacuationCenter.getLocation());
     }
 
     // public boolean hasVehicle() {
@@ -169,7 +169,7 @@ public class PlanningIncident implements Standstill {
                 ",demand=" + demand +
                 (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
                 // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +
-                (evacuationCenter == null ? "" : ",evacuationCenter=[" + evacuationCenter.getLocation().getId() + "]" + evacuationCenter.getLocation().getDescription() ) +
+                (closestEvacuationCenter == null ? "" : ",closestEvacuationCenter=[" + closestEvacuationCenter.getLocation().getId() + "]" + closestEvacuationCenter.getLocation().getDescription() ) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 (vehicle == null ? "" : ",vehicle=" + vehicle.getId()) +
                 ",id=" + id +
