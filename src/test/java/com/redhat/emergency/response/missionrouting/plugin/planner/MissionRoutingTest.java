@@ -46,6 +46,8 @@ public class MissionRoutingTest {
     ScoreManager<MissionRoutingSolution> scoreManager;
     @Inject 
     DistanceMatrix distanceMatrix;
+    @Inject
+    RouteChangedEventPublisher routeChangedEventPublisher;
 
     @Test
     public void testMissionRoutingPlanning() {
@@ -106,7 +108,8 @@ public class MissionRoutingTest {
             LOG.info(distanceMatrix.toString());
 
             // Solve the problem using the current Thread
-            solverFactory.buildSolver().solve(SolutionFactory.solutionFromIncidents(boats, shelters, incidents));
+            MissionRoutingSolution solution = solverFactory.buildSolver().solve(SolutionFactory.solutionFromIncidents(boats, shelters, incidents));
+            routeChangedEventPublisher.publishSolution(solution);
         } catch (Exception e) {
             e.printStackTrace();
         }        

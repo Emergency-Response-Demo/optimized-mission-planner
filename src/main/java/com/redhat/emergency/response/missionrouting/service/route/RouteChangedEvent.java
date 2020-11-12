@@ -22,18 +22,18 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.redhat.emergency.response.missionrouting.domain.Distance;
-import org.springframework.context.ApplicationEvent;
+// import org.springframework.context.ApplicationEvent;
 
 /**
  * Event published when the routing plan has been updated either by discovering a better route or by a change
- * in the problem specification (vehicles, visits).
+ * in the problem specification (vehicles, incidents).
  */
-public class RouteChangedEvent extends ApplicationEvent {
+public class RouteChangedEvent { //extends ApplicationEvent {
 
     private final Distance distance;
     private final List<Long> vehicleIds;
-    private final Long depotId;
-    private final List<Long> visitIds;
+    private final Long evacuationCenterId;
+    private final List<Long> incidentIds;
     private final Collection<ShallowRoute> routes;
 
     /**
@@ -42,22 +42,22 @@ public class RouteChangedEvent extends ApplicationEvent {
      * @param source the object on which the event initially occurred (never {@code null})
      * @param distance total distance of all vehicle routes
      * @param vehicleIds vehicle IDs
-     * @param depotId depot ID (may be {@code null} if there are no locations)
-     * @param visitIds IDs of visits
+     * @param evacuationCenterId evacuationCenter ID (may be {@code null} if there are no locations)
+     * @param incidentIds IDs of incidents
      * @param routes vehicle routes
      */
     public RouteChangedEvent(
             Object source,
             Distance distance,
             List<Long> vehicleIds,
-            Long depotId,
-            List<Long> visitIds,
+            Long evacuationCenterId,
+            List<Long> incidentIds,
             Collection<ShallowRoute> routes) {
-        super(source);
+        // super(source);
         this.distance = Objects.requireNonNull(distance);
         this.vehicleIds = Objects.requireNonNull(vehicleIds);
-        this.depotId = depotId; // may be null (no depot)
-        this.visitIds = Objects.requireNonNull(visitIds);
+        this.evacuationCenterId = evacuationCenterId; // may be null (no evacuationCenter)
+        this.incidentIds = Objects.requireNonNull(incidentIds);
         this.routes = Objects.requireNonNull(routes);
     }
 
@@ -89,15 +89,15 @@ public class RouteChangedEvent extends ApplicationEvent {
     }
 
     /**
-     * The depot ID.
+     * The evacuationCenter ID.
      *
-     * @return depot ID
+     * @return evacuationCenter ID
      */
-    public Optional<Long> depotId() {
-        return Optional.ofNullable(depotId);
+    public Optional<Long> evacuationCenterId() {
+        return Optional.ofNullable(evacuationCenterId);
     }
 
-    public List<Long> visitIds() {
-        return visitIds;
+    public List<Long> incidentIds() {
+        return incidentIds;
     }
 }
