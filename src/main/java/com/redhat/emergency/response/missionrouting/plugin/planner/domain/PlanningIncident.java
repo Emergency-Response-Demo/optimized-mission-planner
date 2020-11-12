@@ -122,12 +122,25 @@ public class PlanningIncident implements Standstill {
     }
 
     /**
-     * Distance from this Incident back to the evacuationCenter.
+     * Distance from this Incident back to the Vehicle initial location (departure point).
      *
-     * @return distance from this Incident back its vehicle's evacuationCenter
+     * @return distance from this Incident back its Vehicle initial location.
      */
-    public long distanceToEvacuationCenter() {
+    public long distanceToVehicleInitialLocation() {
         return location.distanceTo(vehicle.getLocation());
+    }
+
+    /**
+     * Distance from this Incident to the closest Evacuation Center.
+     *
+     * @return distance from this Incident to the closest Evacuation Center.
+     */
+    public long distanceToClosestEvacuationCenter() {
+        return location.distanceTo(vehicle.getEvacuationCenter().getLocation());
+    }
+
+    public boolean hasVehicle() {
+        return vehicle.getEvacuationCenter() != null;
     }
 
     /**
@@ -142,7 +155,7 @@ public class PlanningIncident implements Standstill {
     @Override
     public String toString() {
         return "PlanningIncident{" +
-                (location == null ? "" : "location=" + location ) +
+                (location == null ? "" : "location=[" + location.getId() + "]" + location.getDescription() ) +
                 ",demand=" + demand +
                 (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill.getLocation().getId()) +
                 // (previousStandstill == null ? "" : ",previousStandstill=" + previousStandstill) +

@@ -48,6 +48,7 @@ public class PlanningLocationFactory {
     public static PlanningLocation fromDomain(Location location, DistanceMap distanceMap) {
         return new PlanningLocation(
                 location.id(),
+                location.description(),
                 location.coordinates().latitude().doubleValue(),
                 location.coordinates().longitude().doubleValue(),
                 distanceMap);
@@ -60,7 +61,7 @@ public class PlanningLocationFactory {
      * @return planning location without distance map and coordinates
      */
     public static PlanningLocation testLocation(long id) {
-        return testLocation(id, PlanningLocationFactory::failFast);
+        return testLocation(id, null, PlanningLocationFactory::failFast);
     }
 
     /**
@@ -70,8 +71,8 @@ public class PlanningLocationFactory {
      * @param distanceMap distance map
      * @return planning location with distance map and without coordinates
      */
-    public static PlanningLocation testLocation(long id, DistanceMap distanceMap) {
-        return new PlanningLocation(id, 0, 0, distanceMap);
+    public static PlanningLocation testLocation(long id, String description, DistanceMap distanceMap) {
+        return new PlanningLocation(id, description, 0, 0, distanceMap);
     }
 
     private static long failFast(PlanningLocation location) {

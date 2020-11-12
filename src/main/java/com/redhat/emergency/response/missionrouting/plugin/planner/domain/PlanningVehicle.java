@@ -20,13 +20,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.optaplanner.core.api.domain.lookup.PlanningId;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 public class PlanningVehicle implements Standstill {
 
     @PlanningId
     private long id;
+    private String description;
     private int capacity;
+    @PlanningVariable(valueRangeProviderRefs = "evacuationCenter", nullable = false)
     private PlanningEvacuationCenter evacuationCenter;
+    private PlanningLocation location;
 
     // Shadow variables
     private PlanningIncident nextIncident;
@@ -57,6 +61,28 @@ public class PlanningVehicle implements Standstill {
 
     public void setEvacuationCenter(PlanningEvacuationCenter evacuationCenter) {
         this.evacuationCenter = evacuationCenter;
+    }
+
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setLocation(PlanningLocation location) {
+		this.location = location;
+    }
+    
+    // @Override // ???
+    // public PlanningLocation getLocation() {
+    //     return evacuationCenter.getLocation();
+    // }
+
+    @Override
+    public PlanningLocation getLocation() {
+        return location;
     }
 
     @Override
@@ -91,17 +117,14 @@ public class PlanningVehicle implements Standstill {
     }
 
     @Override
-    public PlanningLocation getLocation() {
-        return evacuationCenter.getLocation();
-    }
-
-    @Override
     public String toString() {
         return "PlanningVehicle{" +
                 "capacity=" + capacity +
-                (evacuationCenter == null ? "" : ",evacuationCenter=" + evacuationCenter.getLocation().getId() ) +
+                (location == null ? "" : ",location=[" + location.getId() + "]" + location.getDescription() ) +
+                (evacuationCenter == null ? "" : ",evacuationCenter=[" + evacuationCenter.getLocation().getId() + "]" + evacuationCenter.getLocation().getDescription() ) +
                 (nextIncident == null ? "" : ",nextIncident=" + nextIncident.getId()) +
                 ",id=" + id +
                 '}';
     }
+
 }

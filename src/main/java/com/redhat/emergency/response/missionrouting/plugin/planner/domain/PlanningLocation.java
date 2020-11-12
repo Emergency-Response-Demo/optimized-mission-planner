@@ -21,13 +21,15 @@ import java.util.Objects;
 public class PlanningLocation {
 
     private final long id;
+    private final String description;
     // Only used to calculate angle.
     private final double latitude;
     private final double longitude;
     private final DistanceMap travelDistanceMap;
 
-    PlanningLocation(long id, double latitude, double longitude, DistanceMap travelDistanceMap) {
+    PlanningLocation(long id, String description, double latitude, double longitude, DistanceMap travelDistanceMap) {
         this.id = id;
+        this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
         this.travelDistanceMap = Objects.requireNonNull(travelDistanceMap);
@@ -42,6 +44,15 @@ public class PlanningLocation {
         return id;
     }
 
+    /**
+     * description of the corresponding location.
+     *
+     * @return domain description
+     */
+	public String getDescription() {
+		return description;
+    }
+    
     /**
      * Distance to the given location.
      *
@@ -75,6 +86,8 @@ public class PlanningLocation {
                 ",longitude=" + longitude +
                 ",travelDistanceMap=" + travelDistanceMap +
                 ",id=" + id +
+                ",description=" + description +
                 '}';
     }
+
 }

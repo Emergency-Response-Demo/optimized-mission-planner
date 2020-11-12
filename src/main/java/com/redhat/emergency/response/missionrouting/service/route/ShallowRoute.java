@@ -44,30 +44,32 @@ public class ShallowRoute {
     /**
      * Depot ID.
      */
-    public final long depotId;
+    public final long evacuationCenterId;
     /**
      * Visit IDs (immutable, never {@code null}).
      */
-    public final List<Long> visitIds;
+    // public final List<Long> incidentIds;
+    public final List<String> incidentIds;
 
     /**
      * Create shallow route.
      *
      * @param vehicleId vehicle ID
-     * @param depotId depot ID
-     * @param visitIds visit IDs
+     * @param evacuationCenterId evacuationCenter ID
+     * @param incidentIds incident IDs
      */
-    public ShallowRoute(long vehicleId, long depotId, List<Long> visitIds) {
+    public ShallowRoute(long vehicleId, long evacuationCenterId, List<String> incidentIds) {
         this.vehicleId = vehicleId;
-        this.depotId = depotId;
-        this.visitIds = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(visitIds)));
+        this.evacuationCenterId = evacuationCenterId;
+        this.incidentIds = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(incidentIds)));
     }
 
     @Override
     public String toString() {
-        String route = Stream.concat(Stream.of(depotId), visitIds.stream())
+        String route = Stream.concat(Stream.of(evacuationCenterId), incidentIds.stream())
                 .map(Object::toString)
-                .collect(joining("->", "[", "]"));
+                // add the evacuationCenterId as the last "incident" in the trip
+                .collect(joining("->", "[", " --> " + evacuationCenterId + "]"));
         return vehicleId + ": " + route;
     }
 }

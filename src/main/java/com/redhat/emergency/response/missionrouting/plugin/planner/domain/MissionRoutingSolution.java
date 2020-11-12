@@ -29,6 +29,7 @@ import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 public class MissionRoutingSolution {
 
     @ProblemFactCollectionProperty
+    @ValueRangeProvider(id = "evacuationCenter")
     private List<PlanningEvacuationCenter> evacuationCenterList;
 
     @PlanningEntityCollectionProperty

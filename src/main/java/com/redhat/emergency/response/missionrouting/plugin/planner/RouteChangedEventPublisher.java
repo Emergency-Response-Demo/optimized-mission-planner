@@ -66,8 +66,8 @@ class RouteChangedEventPublisher {
                 event.distance(),
                 solution.getScore());
 
-        logger.debug("Solution: {}", solution);
-        logger.debug("Routes: {}", event.routes());
+        logger.info("Solution: {}", solution);
+        logger.info("Routes: {}", event.routes());
         // eventPublisher.publishEvent(event);
     }
 
@@ -111,16 +111,24 @@ class RouteChangedEventPublisher {
         for (PlanningVehicle vehicle : solution.getVehicleList()) {
             PlanningEvacuationCenter evacuationCenter = vehicle.getEvacuationCenter();
             if (evacuationCenter == null) {
-                throw new IllegalArgumentException(
-                        "Vehicle (id=" + vehicle.getId() + ") is not in the evacuationCenter. That's not allowed");
+                // throw new IllegalArgumentException(
+                //         "Vehicle (id=" + vehicle.getId() + ") is not in the evacuationCenter. That's not allowed");
+                logger.warn(
+                        "Vehicle (id=" + vehicle.getId() + ") has no evacuationCenter assigned!!!");
             }
-            List<Long> visits = new ArrayList<>();
+            else {
+
+            }
+            // List<Long> visits = new ArrayList<>();
+            List<String> visits = new ArrayList<>();
             for (PlanningIncident incident : vehicle.getFutureIncidents()) {
                 if (!solution.getIncidentList().contains(incident)) {
                     throw new IllegalArgumentException("Incident (" + incident + ") doesn't exist");
                 }
-                visits.add(incident.getLocation().getId());
+                // visits.add(incident.getLocation().getId());
+                visits.add(incident.getLocation().getDescription());
             }
+            
             routes.add(new ShallowRoute(vehicle.getId(), evacuationCenter.getId(), visits));
         }
         return routes;
