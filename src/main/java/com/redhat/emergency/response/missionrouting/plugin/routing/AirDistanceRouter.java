@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 
 import com.redhat.emergency.response.missionrouting.domain.Coordinates;
@@ -31,7 +32,7 @@ import com.redhat.emergency.response.missionrouting.service.route.Router;
 
 import io.quarkus.arc.properties.IfBuildProperty;
 
-@Dependent
+@ApplicationScoped
 @IfBuildProperty(name = "app.routing.engine", stringValue = "air", enableIfMissing = false)
 public class AirDistanceRouter implements Router, DistanceCalculator, Region {
 

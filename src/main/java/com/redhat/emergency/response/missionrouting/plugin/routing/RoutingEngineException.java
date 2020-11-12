@@ -18,7 +18,9 @@ package com.redhat.emergency.response.missionrouting.plugin.routing;
 
 public class RoutingEngineException extends RuntimeException {
 
-    RoutingEngineException(String message, Throwable cause) {
+	private static final long serialVersionUID = 1L;
+
+	RoutingEngineException(String message, Throwable cause) {
         super(message, cause);
     }
 }

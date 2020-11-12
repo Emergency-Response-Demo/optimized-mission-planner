@@ -30,12 +30,15 @@ public class MissionRoutingSolution {
 
     @ProblemFactCollectionProperty
     private List<PlanningEvacuationCenter> evacuationCenterList;
+
     @PlanningEntityCollectionProperty
     @ValueRangeProvider(id = "vehicleRange")
     private List<PlanningVehicle> vehicleList;
+
     @PlanningEntityCollectionProperty
     @ValueRangeProvider(id = "incidentRange")
     private List<PlanningIncident> incidentList;
+    
     @PlanningScore
     private HardSoftLongScore score;
 

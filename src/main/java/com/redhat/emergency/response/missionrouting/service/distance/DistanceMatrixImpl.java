@@ -16,6 +16,10 @@
 
 package com.redhat.emergency.response.missionrouting.service.distance;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,13 +32,15 @@ import com.redhat.emergency.response.missionrouting.domain.Location;
 import com.redhat.emergency.response.missionrouting.service.location.DistanceMatrix;
 import com.redhat.emergency.response.missionrouting.service.location.DistanceMatrixRow;
 
+import org.apache.commons.collections4.MapUtils;
+
 @ApplicationScoped
 class DistanceMatrixImpl implements DistanceMatrix {
 
     @Inject
-    private DistanceCalculator distanceCalculator;
+    DistanceCalculator distanceCalculator;
     // @Inject
-    // private DistanceRepository distanceRepository;
+    // DistanceRepository distanceRepository;
     private final Map<Location, Map<Long, Distance>> matrix = new HashMap<>();
 
     @Override
@@ -113,4 +119,22 @@ class DistanceMatrixImpl implements DistanceMatrix {
     public int dimension() {
         return matrix.size();
     }
+
+	@Override
+	public String toString() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        String utf8 = StandardCharsets.UTF_8.name();
+        String str = "";
+        PrintStream ps;
+		try {
+			ps = new PrintStream(baos, true, utf8);
+            MapUtils.debugPrint(ps, "DistanceMatrix", this.matrix);
+            str = baos.toString(utf8);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+        return "DistanceMatrix: \n" + str;
+	}
+
 }

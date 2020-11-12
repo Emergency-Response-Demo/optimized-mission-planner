@@ -65,7 +65,7 @@ public class SolutionFactory {
 
         MissionRoutingSolution solution = new MissionRoutingSolution();
         solution.setVehicleList(new ArrayList<>(vehicles));
-        solution.setEvacuationCenterList(evacuationCenters);
+        solution.setEvacuationCenterList(new ArrayList<>(evacuationCenters));
         solution.setIncidentList(new ArrayList<>(incidents));
         solution.setScore(HardSoftLongScore.ZERO);
         

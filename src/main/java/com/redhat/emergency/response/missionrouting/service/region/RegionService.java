@@ -28,9 +28,9 @@ import javax.inject.Inject;
 public class RegionService {
 
     @Inject
-    private RegionProperties regionProperties;
+    RegionProperties regionProperties;
     @Inject
-    private Region region;
+    Region region;
 
     /**
      * Country codes matching the working region.

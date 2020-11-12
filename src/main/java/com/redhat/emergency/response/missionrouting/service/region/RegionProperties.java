@@ -19,15 +19,12 @@ package com.redhat.emergency.response.missionrouting.service.region;
 import java.util.Collections;
 import java.util.List;
 
-import javax.enterprise.context.Dependent;
-
 import com.redhat.emergency.response.missionrouting.domain.CountryCodeValidator;
 
 import io.quarkus.arc.config.ConfigProperties;
 
-@Dependent
 @ConfigProperties(prefix = "app.region")
-class RegionProperties {
+public class RegionProperties {
 
     /**
      * List of ISO 3166-1 alpha-2 country code(s) matching the loaded OSM file.

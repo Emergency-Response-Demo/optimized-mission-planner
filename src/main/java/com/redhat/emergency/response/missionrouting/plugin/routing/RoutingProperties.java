@@ -16,15 +16,14 @@
 
 package com.redhat.emergency.response.missionrouting.plugin.routing;
 
-import javax.enterprise.context.Dependent;
+import java.util.Optional;
+
 import javax.validation.constraints.NotNull;
 
 import io.quarkus.arc.config.ConfigProperties;
 
-@Dependent
 @ConfigProperties(prefix = "app.routing")
-// @Validated // no idea what the equivalent in MicroProfile
-class RoutingProperties {
+public class RoutingProperties {
 
     /**
      * Directory to read OSM files from.
@@ -45,12 +44,12 @@ class RoutingProperties {
     /**
      * URL of an .osm.pbf file that will be downloaded in case the file doesn't exist on the file system.
      */
-    private String osmDownloadUrl;
+    private Optional<String> osmDownloadUrl;
 
     /**
      * Routing engine providing distances and paths.
      */
-    private RoutingEngine engine;
+    private RoutingEngine engine = RoutingEngine.GRAPHHOPPER;
 
     public String getOsmDir() {
         return osmDir;
@@ -76,11 +75,11 @@ class RoutingProperties {
         this.osmFile = osmFile;
     }
 
-    public String getOsmDownloadUrl() {
+    public Optional<String> getOsmDownloadUrl() {
         return osmDownloadUrl;
     }
 
-    public void setOsmDownloadUrl(String osmDownloadUrl) {
+    public void setOsmDownloadUrl(Optional<String> osmDownloadUrl) {
         this.osmDownloadUrl = osmDownloadUrl;
     }
 

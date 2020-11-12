@@ -118,7 +118,6 @@ public class PlanningIncident implements Standstill {
             throw new IllegalStateException(
                     "This method must not be called when the previousStandstill (null) is not initialized yet.");
         }
-        logger.info("previousStandstill={}", previousStandstill);
         return previousStandstill.getLocation().distanceTo(location);
     }
 

@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.redhat.emergency.response.missionrouting.domain.Coordinates;
@@ -30,9 +30,6 @@ import com.redhat.emergency.response.missionrouting.service.distance.DistanceCal
 import com.redhat.emergency.response.missionrouting.service.region.BoundingBox;
 import com.redhat.emergency.response.missionrouting.service.region.Region;
 import com.redhat.emergency.response.missionrouting.service.route.Router;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-// import org.springframework.stereotype.Component;
 
 import io.quarkus.arc.properties.IfBuildProperty;
 
@@ -45,12 +42,12 @@ import com.graphhopper.util.shapes.BBox;
 /**
  * Provides geographical information needed for route optimization.
  */
-@Dependent
+@ApplicationScoped
 @IfBuildProperty(name = "app.routing.engine", stringValue = "graphhopper", enableIfMissing = true)
 class GraphHopperRouter implements Router, DistanceCalculator, Region {
 
     @Inject
-    private GraphHopperOSM graphHopper;
+    GraphHopperOSM graphHopper;
 
     @Override
     public List<Coordinates> getPath(Coordinates from, Coordinates to) {

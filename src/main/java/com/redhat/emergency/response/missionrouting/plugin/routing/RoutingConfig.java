@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -44,33 +45,35 @@ import com.graphhopper.routing.util.FlagEncoderFactory;
  * through environment.
  */
 @ApplicationScoped
-class RoutingConfig {
+public class RoutingConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(RoutingConfig.class);
 
     @Inject 
     RoutingProperties routingProperties;
-    private final Path osmDir;
-    private final Path osmFile;
-    private final String osmDownloadUrl;
-    private final Path graphHopperDir;
-    private final Path graphDir;
 
-    RoutingConfig() {
+    private Path osmDir;
+    private Path osmFile;
+    private String osmDownloadUrl;
+    private Path graphHopperDir;
+    private Path graphDir;
+
+    @PostConstruct 
+    void init() {
         osmDir = Paths.get(routingProperties.getOsmDir()).toAbsolutePath();
         osmFile = osmDir.resolve(routingProperties.getOsmFile()).toAbsolutePath();
-        osmDownloadUrl = routingProperties.getOsmDownloadUrl();
+        osmDownloadUrl = routingProperties.getOsmDownloadUrl().orElse(null);
         graphHopperDir = Paths.get(routingProperties.getGhDir());
         String regionName = routingProperties.getOsmFile().replaceFirst("\\.osm\\.pbf$", "");
         graphDir = graphHopperDir.resolve(regionName).toAbsolutePath();
     }
 
     /**
-     * Avoids creating real GraphHopper instance when running a @SpringBootTest.
+     * Avoids creating real GraphHopper instance when running a @QuarkusTest.
      *
      * @return real GraphHopper
      */
-    @UnlessBuildProfile("test")
+    // @UnlessBuildProfile("test")
     @Produces
     @IfBuildProperty(name = "app.routing.engine", stringValue = "graphhopper", enableIfMissing = true)
     GraphHopperOSM graphHopper() {
