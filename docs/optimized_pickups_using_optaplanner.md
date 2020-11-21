@@ -15,6 +15,7 @@
     - [4.3.4. Multi Pickup, Two Responders](#434-multi-pickup-two-responders)
     - [4.3.5. Multi Pickup, One Responder, Boat Capacity Exceeded](#435-multi-pickup-one-responder-boat-capacity-exceeded)
     - [4.3.6. Multi Pickup, Two Responders, One Medical](#436-multi-pickup-two-responders-one-medical)
+- [5. Appendix](#5-appendix)
   
 # 1. Overview
 
@@ -43,6 +44,9 @@ This implementation resolves a variety of different use-cases as depicted in sec
 
 
 # 2. Architecture
+
+https://en.wikipedia.org/wiki/Vehicle_routing_problem
+    Vehicle Routing Problem with Pickup and Delivery
 
 ## 2.1. Terminology
 For general overview of Optaplanner terminology and concepts, please see the [Optaplanner docs](https://docs.optaplanner.org/7.44.0.Final/optaplanner-docs/html_single/index.html).
@@ -151,4 +155,6 @@ The following are Optaplanner concepts used specifically in the Emergency Respon
   Leonardo Echevarria picks up Reagan Wilson
 
 
+# 5. Appendix
 
+  ![](images/planning_session_with_geoffrey.png)
