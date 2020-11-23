@@ -1,6 +1,9 @@
 - [1. Overview](#1-overview)
   - [1.1. Background](#11-background)
   - [1.2. Purpose](#12-purpose)
+  - [1.3. Dynamicity](#13-dynamicity)
+  - [1.4. Detailed workflow](#14-detailed-workflow)
+  - [1.5. Other potential extensions:](#15-other-potential-extensions)
 - [2. Architecture](#2-architecture)
   - [2.1. Terminology](#21-terminology)
   - [2.2. Models](#22-models)
@@ -35,12 +38,63 @@ In the 2.x releases of the Emergency Response demo, a total of 4 missions would 
 
 ## 1.2. Purpose
 
-The goal of this implementation is to create an ER-Demo mission consisting of an optimized set of incidents that maximizes responder boat capacity and other considerations such as distance to evacuation centers and medical attention requirements. 
+The goal of this implementation is to create an ER-Demo mission consisting of an optimized set of incidents that maximizes responder boat capacity and other considerations such as distances to incidents  and medical attention requirements. 
 
-multiple ER-Demo missions assigned to multiple available responders using the closest incident pickup location and the best route to the closest shelter destination.
+## 1.3. Dynamicity
+
+
+What makes this scenario more challenging than the more static VRP use case is it’s dynamicity. 
+
+1. Incidents can (and will) continue to pop up during the demo.  
+1. Responders can also be added to the scenario; in particular by demo participants logging in and registering.  
+1. The availability of Responders varies; a Responder could be registered but they need to indicate they are available to be assigned a mission.  
+1. Once on their way to rescue an Incident they will not be available to be assigned another one until they have pushed the “Picked Up” button in the Responder interface.  Similarly, once a Responder has accepted a mission to rescue an Incident and is on their way, that Incident will be removed from the pool (pinned).  
+
+1. Priority Zone(s) can be created or deleted by the Incident Commander at any time during a demo run.  
+1. There are multiple Shelters (as opposed to one Depot), the usual number is 3.  New Shelters can be created, but not typically during a particular run (that would be cool though.)
+1. Once they have made their first rescue run, responders will be starting back out from the shelter where they made their first dropoff.
+
 
 This implementation resolves a variety of different use-cases as depicted in section 4 of this document.
 
+
+## 1.4. Detailed workflow
+
+1. Incidents are simulated (as they are now).  They are created using the simulator engine and there could be 10s, 100s, or 1000s of them.  Additional Incidents can be created at any time.
+
+1. A participant Responder registers as they do now, indicating name, phone, boat capacity, medical capability.  Responders can also be created by the simulator engine (and typically are).
+
+1. Participant Responders indicate their location on the map, then press “Available”.  A mission is created.
+
+1. As Incidents and Responders enter the system the OptaPlanner engine continually refines a candidate solution.
+
+1. The OptaPlanner-as-a-Service engine is queried to present the current mission solution for a Responder.  They are only given the first incident to rescue, and the route to them.
+
+1. Once the Responder arrives at the Incident location they press “Picked Up” in the Responder interface (this is done automatically for the simulated Responders).
+
+1. Because the Incident has been picked-up, the Incident icon should disappear on the map.
+
+1. Again the engine is queried to provide the next incident to proceed to, along with the route.
+
+1. These steps continue until the next step is “proceed to this shelter”, when their capacity is full.  They do so, unload all evacuees, and then press “Available” to be sent out again.
+
+1. Responders continue to be assigned Incidents until all have been rescued or assigned.
+
+
+
+## 1.5. Other potential extensions:
+
+1. Allow for the number of people picked up to differ from the number requested/stored (they miscounted, or got rescued by someone not in the system).
+
+1. Incidents being cancelled.
+
+1. Incidents being created outside of the simulator (e.g., the project in the works for injecting participant-created incidents using ML/NLP.)
+
+1. Responders cancelling.
+
+1. Responders deciding to abandon the plan and head straight to a shelter (perhaps because of a life-or-death medical need)
+
+  (To be clear, we are not implementing any of these now.)
 
 
 # 2. Architecture
